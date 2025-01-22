@@ -8,13 +8,14 @@ body {
     font-weight: bold;
 }
 .container { 
-    margin-top: 70px;
+    margin-top: 20px;
+    margin-right: 150px;
 }
 .row {
 
 }
 .col-8 {
-
+    
 }
 .photo {
     background: url(../image/photo.jpg) no-repeat center center;
@@ -45,4 +46,21 @@ body {
 }
 .title_photo {
     text-align: center;
+}
+.button_js {
+    text-align: center;
+}
+#myButton {
+    text-align: center;
+    border: none;
+    border-radius: 25px;
+    width: 200px;
+    height: 80px;
+    background-color: #b41eff;
+    color: #342626;
+    font-weight: bold;
+}
+#demo img {
+    margin-top: 20px;
+    width: 30%;
 }
