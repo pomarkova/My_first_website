@@ -69,6 +69,9 @@ $link = mysqli_connect('127.0.0.1', 'root', 'vika', 'first');
 
 if (isset($_POST['submit'])) {
 
+    $title = strip_tags($_POST['title']);
+    $main_text = strip_tags($_POST['text']);
+
     $title = mysqli_real_escape_string['title'];
     $main_text = mysqli_real_escape_string['text'];
 
