@@ -69,11 +69,14 @@ $link = mysqli_connect('127.0.0.1', 'root', 'vika', 'first');
 
 if (isset($_POST['submit'])) {
 
-    $title = $_POST['title'];
-    $main_text = $_POST['text'];
+    $title = mysqli_real_escape_string['title'];
+    $main_text = mysqli_real_escape_string['text'];
 
     if (!$title || !$main_text) die ("Заполните все поля");
 
+    $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    $main_text = htmlspecialchars($main_text, ENT_QUOTES, 'UTF-8');
+    
     $sql = "INSERT INTO posts (title, main_text) VALUES ('$title', '$main_text')";
 
     if (!mysqli_query($link, $sql)) die("не удалось добавить пост");
