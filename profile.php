@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-8">
                 <h2> Меня зовут Помаркова Виктория, я студентка ДВФУ 2 курса, 
-                    обучаюсь на специальности Информационная безопасность Б9123-10.03.01отзи
+                    учусь на специальности Информационная безопасность Б9123-10.03.01отзи
                 </h2>
                 <h3>Мне нужно написать здесь побольше текста, поэтому рассказываю)))
                     С 4 до 18 лет я занималась танцами и пару лет гимнастикой, также несколько лет ходила на квиллинг, 
@@ -41,6 +41,56 @@
             <p id="demo"></p>
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="hello" align="center">
+                    Привет, <?php echo $_COOKIE['User']; ?>
+                </h1>
+            </div>
+            <div class="col-12 vertical-form" align="center">
+                <form method="POST" action="profile.php" enctype="multipart/form-data" name="upload">
+                    <input type="text" class="form" type="text" name="title" cols="30" rows="10" placeholder="Заголовок вашего поста "></input>
+                    <textarea name="text" cols="30" rows="10" placeholder="Введите текст вашего поста ..."></textarea>
+                    <input type="file" name="file" /><br>
+                    <button type="submit" class="btn_red" name="submit">Сохранить пост!</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="js/button.js"></script>
 </body>
 </html>
+
+<?php
+require_once('db.php');
+
+$link = mysqli_connect('127.0.0.1', 'root', 'vika', 'first');
+
+if (isset($_POST['submit'])) {
+
+    $title = $_POST['title'];
+    $main_text = $_POST['text'];
+
+    if (!$title || !$main_text) die ("Заполните все поля");
+
+    $sql = "INSERT INTO posts (title, main_text) VALUES ('$title', '$main_text')";
+
+    if (!mysqli_query($link, $sql)) die("не удалось добавить пост");
+}    
+    if(!empty($_FILES["file"]))
+    {
+        if (((@$_FILES["file"]["type"] == "image/gif") || (@$_FILES["file"]["type"] == "image/jpeg")
+        || (@$_FILES["file"]["type"] == "image/jpg") || (@$_FILES["file"]["type"] == "image/pjpeg")
+        || (@$_FILES["file"]["type"] == "image/x-png") || (@$_FILES["file"]["type"] == "image/png"))
+        && (@$_FILES["file"]["size"] < 102400))
+        {
+            move_uploaded_file($_FILES["file"]["tmp_name"], "upload/" . $_FILES["file"]["name"]);
+            echo "Load in:  " . "upload/" . $_FILES["file"]["name"];
+        }
+        else
+        {
+            echo "upload failed!";
+        }
+    }
+?>
