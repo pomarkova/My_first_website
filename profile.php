@@ -72,8 +72,8 @@ if (isset($_POST['submit'])) {
     $title = strip_tags($_POST['title']);
     $main_text = strip_tags($_POST['text']);
 
-    $title = mysqli_real_escape_string['title'];
-    $main_text = mysqli_real_escape_string['text'];
+    $title = mysqli_real_escape_string($link, $_POST['title']);
+    $main_text = mysqli_real_escape_string($link, $_POST['text']);
 
     if (!$title || !$main_text) die ("Заполните все поля");
 
@@ -86,17 +86,35 @@ if (isset($_POST['submit'])) {
 }    
     if(!empty($_FILES["file"]))
     {
-        if (((@$_FILES["file"]["type"] == "image/gif") || (@$_FILES["file"]["type"] == "image/jpeg")
-        || (@$_FILES["file"]["type"] == "image/jpg") || (@$_FILES["file"]["type"] == "image/pjpeg")
-        || (@$_FILES["file"]["type"] == "image/x-png") || (@$_FILES["file"]["type"] == "image/png"))
-        && (@$_FILES["file"]["size"] < 102400))
-        {
-            move_uploaded_file($_FILES["file"]["tmp_name"], "upload/" . $_FILES["file"]["name"]);
-            echo "Load in:  " . "upload/" . $_FILES["file"]["name"];
+        $errors = [];
+        $allowedtypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/pjpeg', 'image/x-png', 'image/png'];
+
+        if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+            $errors[] = 'Произошла ошибка при загрузке файла.';
         }
-        else
-        {
-            echo "upload failed!";
+        $maxFileSize = 102400;
+    $realFileSize = filesize($_FILES['file']['tmp_name']);
+    if ($realFileSize > $maxFileSize) {
+        $errors[] = 'Файл слишком большой.';
+    }
+    $fileType = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $_FILES['file']['tmp_name']);
+      
+      if (!in_array($fileType, $allowedTypes)) {
+      $errors[] = 'Недопустимый тип файла.';
+  }
+  if(empty($errors)) {
+    $tempPath = $_FILES['file']['tmp_name'];
+    $destinationPath = 'upload/' . uniqid() . '_' . basename($_FILES['file']['name']);
+
+    if (move_upload_file($tempPath, $destinationPath)) {
+        echo "Файл загружен успешно: " . $destinationPath;
+        } else {
+            $errors[] = 'Не удалось переместить загруженный файл.';
+        }
+    } else {
+        foreach ($errors as $error) {
+            echo $error . '<br>';
         }
     }
+}
 ?>

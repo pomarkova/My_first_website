@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row" align="center">
         <div class="col-12 index">
-            <h1>Страница постов!</h1>
+            <h1>Авторизуйтесь!</h1>
         <?php
         if (!isset($_COOKIE['User'])) {
         ?>
